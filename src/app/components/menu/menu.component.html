@@ -1,0 +1,47 @@
+<div class="menu-container">
+  <h1>Hunt the Wumpus</h1>
+  
+  <div class="board-size">
+    <h2>Board Size</h2>
+    <div class="size-inputs">
+      <div class="input-group">
+        <label for="width">Width:</label>
+        <input
+          type="number"
+          id="width"
+          [(ngModel)]="boardWidth"
+          min="3"
+          max="100"
+        />
+      </div>
+      <div class="input-group">
+        <label for="height">Height:</label>
+        <input
+          type="number"
+          id="height"
+          [(ngModel)]="boardHeight"
+          min="3"
+          max="100"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="controls-config">
+    <h2>Controls Configuration</h2>
+    <div class="control-inputs">
+      <div class="control-group" *ngFor="let control of controls | keyvalue">
+        <label [for]="control.key">{{control.key | titlecase}}:</label>
+        <input
+          [id]="control.key"
+          type="text"
+          [value]="control.value"
+          readonly
+          (keydown)="updateControl(control.key, $event)"
+        />
+      </div>
+    </div>
+  </div>
+
+  <button class="start-button" (click)="startGame()">Start Game</button>
+</div>

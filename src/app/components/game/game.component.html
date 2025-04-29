@@ -1,0 +1,21 @@
+<div class="game-container" *ngIf="gameState$ | async as gameState">
+  <div class="game-info">
+    <div class="arrows">Arrows: {{gameState.arrows}}</div>
+    <div class="message" [class.game-over]="gameState.isGameOver">{{gameState.message}}</div>
+    <div class="shooting-mode" *ngIf="shootMode">Shooting Mode Active</div>
+  </div>
+
+  <div class="game-board">
+    <div class="row" *ngFor="let row of gameState.boardSize.height | range">
+      <div class="cell" *ngFor="let col of gameState.boardSize.width | range">
+        {{ getCellContent(col, row, gameState) }}
+      </div>
+    </div>
+  </div>
+
+  <div class="controls-info">
+    <p>Use arrow keys to move</p>
+    <p>Press SPACE + arrow key to shoot</p>
+    <a routerLink="/" class="back-button">Back to Menu</a>
+  </div>
+</div>

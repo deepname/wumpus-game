@@ -1,0 +1,105 @@
+import { Component, HostListener, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { Observable } from 'rxjs';
+import { GameService } from '../../services/game.service';
+import { GameState } from '../../models/game.models';
+import { RangePipe } from '../../pipes/range.pipe';
+
+@Component({
+  selector: 'app-game',
+  standalone: true,
+  imports: [CommonModule, RouterModule, RangePipe],
+  templateUrl: './game.component.html',
+  styleUrls: ['./game.component.scss']
+})
+export class GameComponent implements OnInit {
+  gameState$!: Observable<GameState>;
+  shootMode = false;
+
+  constructor(private gameService: GameService) {}
+
+  ngOnInit(): void {
+    this.gameState$ = this.gameService.getGameState();
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent): void {
+    let currentState: GameState | undefined;
+    this.gameState$.subscribe(state => currentState = state);
+
+    if (currentState?.isGameOver) return;
+
+    if (event.code === 'Space') {
+      // Toggle shoot mode
+      this.shootMode = !this.shootMode;
+      return;
+    }
+
+    if (this.shootMode) {
+      switch (event.code) {
+        case 'ArrowUp':
+          this.gameService.shootArrow('up');
+          break;
+        case 'ArrowDown':
+          this.gameService.shootArrow('down');
+          break;
+        case 'ArrowLeft':
+          this.gameService.shootArrow('left');
+          break;
+        case 'ArrowRight':
+          this.gameService.shootArrow('right');
+          break;
+      }
+      this.shootMode = false;
+    } else {
+      switch (event.code) {
+        case 'ArrowUp':
+          this.gameService.moveHunter('up');
+          break;
+        case 'ArrowDown':
+          this.gameService.moveHunter('down');
+          break;
+        case 'ArrowLeft':
+          this.gameService.moveHunter('left');
+          break;
+        case 'ArrowRight':
+          this.gameService.moveHunter('right');
+          break;
+      }
+    }
+  }
+
+  getCellContent(x: number, y: number, state: GameState): string {
+    if (state.hunter.x === x && state.hunter.y === y) {
+      return '🏹';
+    } else if (state.wumpus.some(w => w.x === x && w.y === y)) {
+      return '👾';
+    } else if (state.pits.some(p => p.x === x && p.y === y)) {
+      return '⚫';
+    }
+    return ' ';
+  }
+
+  generateBoard(state: GameState): string[][] {
+    const board: string[][] = [];
+    const width = state.boardSize.width;
+    const height = state.boardSize.height;
+
+    for (let y = 0; y < height; y++) {
+      board[y] = [];
+      for (let x = 0; x < width; x++) {
+        if (state.hunter.x === x && state.hunter.y === y) {
+          board[y][x] = 'H';
+        } else if (state.wumpus.some(w => w.x === x && w.y === y)) {
+          board[y][x] = 'W';
+        } else if (state.pits.some(p => p.x === x && p.y === y)) {
+          board[y][x] = 'P';
+        } else {
+          board[y][x] = '.';
+        }
+      }
+    }
+    return board;
+  }
+}
