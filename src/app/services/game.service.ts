@@ -6,7 +6,7 @@ import { GameConfig, GameState, Position } from '../models/game.models';
   providedIn: 'root'
 })
 export class GameService {
-  private readonly MIN_SIZE = 3;
+  private readonly MIN_SIZE = 4;
   private readonly MAX_SIZE = 40;
   private readonly DEFAULT_ARROWS = 3;
 
@@ -32,6 +32,87 @@ export class GameService {
       shoot: 'Space'
     }
   };
+
+  private getNearbyWarnings(position: Position): string {
+    const warnings: string[] = [];
+    const adjacentPositions = [
+      { x: position.x - 1, y: position.y },
+      { x: position.x + 1, y: position.y },
+      { x: position.x, y: position.y - 1 },
+      { x: position.x, y: position.y + 1 }
+    ];
+
+    if (adjacentPositions.some(pos => this.isPositionOccupied(pos, this.gameState.value.wumpus))) {
+      warnings.push('You smell something terrible nearby!');
+    }
+    if (adjacentPositions.some(pos => this.isPositionOccupied(pos, this.gameState.value.pits))) {
+      warnings.push('You feel a draft!');
+    }
+
+    return warnings.join(' ');
+  }
+
+  private generateWumpusPositions(): Position[] {
+    const numWumpus = Math.max(1, Math.floor((this.config.boardSize.width * this.config.boardSize.height) / 20));
+    const positions: Position[] = [];
+    
+    while (positions.length < numWumpus) {
+      const pos = this.getRandomPosition();
+      // No permitir Wumpus en la casilla de inicio del hunter
+      if ((pos.x !== 0 || pos.y !== 0) && !this.isPositionOccupied(pos, positions)) {
+        positions.push(pos);
+      }
+    }
+    
+    return positions;
+  }
+
+  private generatePits(): Position[] {
+    const numPits = Math.max(2, Math.floor((this.config.boardSize.width * this.config.boardSize.height) / 10));
+    const positions: Position[] = [];
+    
+    while (positions.length < numPits) {
+      const pos = this.getRandomPosition();
+      if (!this.isPositionOccupied(pos, positions) && !this.isPositionOccupied(pos, this.gameState.value.wumpus)) {
+        positions.push(pos);
+      }
+    }
+    
+    return positions;
+  }
+
+  private getRandomPosition(): Position {
+    return {
+      x: Math.floor(Math.random() * this.config.boardSize.width),
+      y: Math.floor(Math.random() * this.config.boardSize.height)
+    };
+  }
+
+  private isPositionOccupied(pos: Position, positions: Position[]): boolean {
+    return positions.some(p => p.x === pos.x && p.y === pos.y);
+  }
+
+  // Nueva función para comprobar colisiones y oro
+  private checkCollisionsWithGold(state: GameState): void {
+    let newState = { ...state };
+    if (this.isPositionOccupied(state.hunter, state.wumpus)) {
+      newState = {
+        ...newState,
+        isGameOver: true,
+        message: 'Game Over Hunter! A Wumpus got you!'
+      };
+    } else if (this.isPositionOccupied(state.hunter, state.pits)) {
+      newState = {
+        ...newState,
+        isGameOver: true,
+        message: 'Game Over Hunter! You fell into a pit!'
+      };
+    }else {
+      newState.message = this.getNearbyWarnings(state.hunter);
+    }
+
+    this.gameState.next(newState);
+  }
 
   getGameState(): Observable<GameState> {
     return this.gameState.asObservable();
@@ -76,46 +157,6 @@ export class GameService {
     this.config.controls = { ...this.config.controls, ...controls };
   }
 
-  private generateWumpusPositions(): Position[] {
-    const numWumpus = Math.max(1, Math.floor((this.config.boardSize.width * this.config.boardSize.height) / 20));
-    const positions: Position[] = [];
-    
-    while (positions.length < numWumpus) {
-      const pos = this.getRandomPosition();
-      // No permitir Wumpus en la casilla de inicio del hunter
-      if ((pos.x !== 0 || pos.y !== 0) && !this.isPositionOccupied(pos, positions)) {
-        positions.push(pos);
-      }
-    }
-    
-    return positions;
-  }
-
-  private generatePits(): Position[] {
-    const numPits = Math.max(2, Math.floor((this.config.boardSize.width * this.config.boardSize.height) / 10));
-    const positions: Position[] = [];
-    
-    while (positions.length < numPits) {
-      const pos = this.getRandomPosition();
-      if (!this.isPositionOccupied(pos, positions) && !this.isPositionOccupied(pos, this.gameState.value.wumpus)) {
-        positions.push(pos);
-      }
-    }
-    
-    return positions;
-  }
-
-  private getRandomPosition(): Position {
-    return {
-      x: Math.floor(Math.random() * this.config.boardSize.width),
-      y: Math.floor(Math.random() * this.config.boardSize.height)
-    };
-  }
-
-  private isPositionOccupied(pos: Position, positions: Position[]): boolean {
-    return positions.some(p => p.x === pos.x && p.y === pos.y);
-  }
-
   moveHunter(direction: 'up' | 'down' | 'left' | 'right'): void {
     if (this.gameState.value.isGameOver) return;
 
@@ -153,25 +194,6 @@ export class GameService {
 
     // Mantén la lógica de colisiones existente
     this.checkCollisionsWithGold(newState);
-  }
-
-  // Nueva función para comprobar colisiones y oro
-  private checkCollisionsWithGold(state: GameState): void {
-    let newState = { ...state };
-    if (this.isPositionOccupied(state.hunter, state.wumpus)) {
-      newState = {
-        ...newState,
-        isGameOver: true,
-        message: 'Game Over Hunter! A Wumpus got you!'
-      };
-    } else if (this.isPositionOccupied(state.hunter, state.pits)) {
-      newState = {
-        ...newState,
-        isGameOver: true,
-        message: 'Game Over Hunter! You fell into a pit!'
-      };
-    }
-    this.gameState.next(newState);
   }
 
   shootArrow(direction: 'up' | 'down' | 'left' | 'right'): void {
@@ -216,48 +238,6 @@ export class GameService {
     }
 
     this.gameState.next(newState);
-  }
-
-  private checkCollisions(newPosition: Position): void {
-    const state = this.gameState.value;
-    let newState = { ...state, hunter: newPosition };
-
-    if (this.isPositionOccupied(newPosition, state.wumpus)) {
-      newState = {
-        ...newState,
-        isGameOver: true,
-        message: 'Game Over Hunter! A Wumpus got you!'
-      };
-    } else if (this.isPositionOccupied(newPosition, state.pits)) {
-      newState = {
-        ...newState,
-        isGameOver: true,
-        message: 'Game Over Hunter! You fell into a pit!'
-      };
-    } else {
-      newState.message = this.getNearbyWarnings(newPosition);
-    }
-
-    this.gameState.next(newState);
-  }
-
-  private getNearbyWarnings(position: Position): string {
-    const warnings: string[] = [];
-    const adjacentPositions = [
-      { x: position.x - 1, y: position.y },
-      { x: position.x + 1, y: position.y },
-      { x: position.x, y: position.y - 1 },
-      { x: position.x, y: position.y + 1 }
-    ];
-
-    if (adjacentPositions.some(pos => this.isPositionOccupied(pos, this.gameState.value.wumpus))) {
-      warnings.push('You smell something terrible nearby!');
-    }
-    if (adjacentPositions.some(pos => this.isPositionOccupied(pos, this.gameState.value.pits))) {
-      warnings.push('You feel a draft!');
-    }
-
-    return warnings.join(' ');
   }
 
   getShowFog(): boolean {
