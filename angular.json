@@ -42,7 +42,13 @@
               "src/styles.scss"
             ],
             "scripts": []
-          },
+          ,
+          "stylePreprocessorOptions": {
+            "includePaths": [
+              "src/styles"
+            ]
+          }
+        },
           "configurations": {
             "production": {
               "budgets": [
@@ -101,7 +107,13 @@
               "src/styles.scss"
             ],
             "scripts": []
+          ,
+          "stylePreprocessorOptions": {
+            "includePaths": [
+              "src/styles"
+            ]
           }
+        }
         },
         "lint": {
           "builder": "@angular-eslint/builder:lint",
