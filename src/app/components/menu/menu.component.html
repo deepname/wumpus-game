@@ -10,7 +10,7 @@
           type="number"
           id="width"
           [(ngModel)]="boardWidth"
-          min="3"
+          min="4"
           max="100"
         />
       </div>
@@ -20,7 +20,7 @@
           type="number"
           id="height"
           [(ngModel)]="boardHeight"
-          min="3"
+          min="4"
           max="100"
         />
       </div>
@@ -43,5 +43,5 @@
     </div>
   </div>
 
-  <button class="start-button" (click)="startGame()">Start Game</button>
+  <button class="start-button" (click)="startGame()" [disabled]="!boardSizeValid">Start Game</button>
 </div>

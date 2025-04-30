@@ -33,6 +33,10 @@ export class MenuComponent {
     this.router.navigate(['/game']);
   }
 
+  get boardSizeValid(): boolean {
+    return this.boardWidth >= 4 && this.boardHeight >= 4;
+  }
+
   updateControl(control: string, event: KeyboardEvent): void {
     const validControl = control as keyof typeof this.controls;
     event.preventDefault();
