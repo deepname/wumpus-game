@@ -78,6 +78,25 @@ export class GameComponent implements OnInit {
     } else if (state.pits.some(p => p.x === x && p.y === y)) {
       return '⚫';
     }
+    return this.getAdjacentEffects(x, y, state);
+  }
+
+  getAdjacentEffects(x: number, y: number, state: GameState): string {
+    const adj = [
+      { x: x - 1, y },
+      { x: x + 1, y },
+      { x, y: y - 1 },
+      { x, y: y + 1 }
+    ];
+    let stench = false;
+    let breeze = false;
+    for (const pos of adj) {
+      if (state.wumpus.some(w => w.x === pos.x && w.y === pos.y)) stench = true;
+      if (state.pits.some(p => p.x === pos.x && p.y === pos.y)) breeze = true;
+    }
+    if (stench && breeze) return '💨🌀';
+    if (stench) return '💨';
+    if (breeze) return '🌀';
     return ' ';
   }
 
