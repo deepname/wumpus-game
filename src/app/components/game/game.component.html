@@ -5,10 +5,10 @@
     <div class="shooting-mode" *ngIf="shootMode">Shooting Mode Active</div>
   </div>
 
-  <div class="game-board">
+  <div #gameBoard class="game-board" [ngClass]="{'big-board': gameState.boardSize.width > 20 || gameState.boardSize.height > 20}">
     <div class="row" *ngFor="let row of gameState.boardSize.height | range">
       <div class="cell" *ngFor="let col of gameState.boardSize.width | range"
-           [ngClass]="{'cell--start': col === 0 && row === 0}">
+           [ngClass]="{'cell--start': col === 0 && row === 0, 'hunter': gameState.hunter.x === col && gameState.hunter.y === row}">
         <ng-container *ngIf="isCellVisible(col, row, gameState); else hiddenCell">
           {{ getCellContent(col, row, gameState) }}
         </ng-container>

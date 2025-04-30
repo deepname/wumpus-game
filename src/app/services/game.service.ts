@@ -148,6 +148,9 @@ export class GameService {
     // Si el cazador tiene el oro y vuelve a la entrada
     if (newState.hasGold && newPosition.x === 0 && newPosition.y === 0) {
       newState = { ...newState, isGameOver: true, message: 'Congratulations! You escaped with the gold!' };
+    } else if (!newState.hasGold && newPosition.x === 0 && newPosition.y === 0 && currentState.hasGold) {
+      // Si vuelve a la salida sin el oro, no gana
+      newState = { ...newState, message: 'You must collect the gold and return to the entrance!' };
     }
 
     // Mantén la lógica de colisiones existente

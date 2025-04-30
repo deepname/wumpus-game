@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -13,11 +13,14 @@ import { RangePipe } from '../../pipes/range.pipe';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnInit, AfterViewInit {
   gameState$!: Observable<GameState>;
   shootMode = false;
   visited: Set<string> = new Set();
   showFog: boolean = true;
+
+  @ViewChild('gameBoard', { static: false }) gameBoardRef!: ElementRef<HTMLDivElement>;
+  hunterPosition = { x: 0, y: 0 };
 
   constructor(private gameService: GameService) {}
 
@@ -49,7 +52,30 @@ export class GameComponent implements OnInit {
           }
         }
       }
+      this.hunterPosition = { x: state.hunter.x, y: state.hunter.y };
+      this.centerGameBoard();
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.centerGameBoard();
+  }
+
+  centerGameBoard(): void {
+    if (this.gameBoardRef) {
+      const gameBoard = this.gameBoardRef.nativeElement as HTMLElement;
+      // Busca la primera celda para obtener el tamaño
+      const firstRow = gameBoard.querySelector('.row');
+      if (!firstRow) return;
+      const firstCell = firstRow.querySelector('.cell') as HTMLElement;
+      if (!firstCell) return;
+      const cellWidth = firstCell.offsetWidth;
+      const cellHeight = firstCell.offsetHeight;
+      const centerX = this.hunterPosition.x * cellWidth + cellWidth / 2;
+      const centerY = this.hunterPosition.y * cellHeight + cellHeight / 2;
+      gameBoard.scrollLeft = centerX - gameBoard.offsetWidth / 2;
+      gameBoard.scrollTop = centerY - gameBoard.offsetHeight / 2;
+    }
   }
 
   isCellVisible(x: number, y: number, state: GameState): boolean {
