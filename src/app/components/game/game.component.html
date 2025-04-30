@@ -8,7 +8,12 @@
   <div class="game-board">
     <div class="row" *ngFor="let row of gameState.boardSize.height | range">
       <div class="cell" *ngFor="let col of gameState.boardSize.width | range">
-        {{ getCellContent(col, row, gameState) }}
+        <ng-container *ngIf="isCellVisible(col, row, gameState); else hiddenCell">
+          {{ getCellContent(col, row, gameState) }}
+        </ng-container>
+        <ng-template #hiddenCell>
+          <span class="cell--hidden"></span>
+        </ng-template>
       </div>
     </div>
   </div>

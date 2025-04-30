@@ -16,11 +16,28 @@ import { RangePipe } from '../../pipes/range.pipe';
 export class GameComponent implements OnInit {
   gameState$!: Observable<GameState>;
   shootMode = false;
+  visited: Set<string> = new Set();
 
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
     this.gameState$ = this.gameService.getGameState();
+    this.gameState$.subscribe(state => {
+      // Marcar como visitada la casilla del hunter
+      this.visited.add(`${state.hunter.x},${state.hunter.y}`);
+      // Si el juego termina, mostrar todas
+      if (state.isGameOver) {
+        for (let x = 0; x < state.boardSize.width; x++) {
+          for (let y = 0; y < state.boardSize.height; y++) {
+            this.visited.add(`${x},${y}`);
+          }
+        }
+      }
+    });
+  }
+
+  isCellVisible(x: number, y: number, state: GameState): boolean {
+    return state.isGameOver || this.visited.has(`${x},${y}`) || (state.hunter.x === x && state.hunter.y === y);
   }
 
   @HostListener('window:keydown', ['$event'])
