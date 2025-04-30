@@ -2,58 +2,47 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.9.
 
+![Hunt the Wumpus](https://upload.wikimedia.org/wikipedia/en/7/77/Ti_hunt_the_wumpus_boxart.jpg){style="display: block; margin: 0 auto" }}
+
+Hunt the Wumpus is a text-based adventure game developed by Gregory Yob in 1973. In the game, the player moves through a series of connected caves, arranged as the vertices of a dodecahedron, as they hunt a monster named the Wumpus. The turn-based game has the player trying to avoid fatal bottomless pits and "super bats" that will move them around the cave system; the goal is to fire one of their "crooked arrows" through the caves to kill the Wumpus. Yob created the game in early 1973 due to his annoyance at the multiple hide-and-seek games set in caves in a grid pattern, and multiple variations of the game were sold via mail order by Yob and the People's Computer Company. The source code to the game was published in Creative Computing in 1975 and republished in The Best of Creative Computing the following year.
+
+
+[Wiki hunt Wumpus](https://en.wikipedia.org/wiki/Hunt_the_Wumpus)
+
 ## Development server
 
 To start a local development server, run:
 
-```bash
-ng serve
-```
+`
+npm start
+`
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Development watch server
 
-## Code scaffolding
+`
+npm run watch
+`
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Production server
 
-```bash
-ng generate component component-name
-```
+`
+npm run build
+`
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Testing 
 
-```bash
-ng generate --help
-```
+`
+npm run test
+`
 
-## Building
+## Testing coverage
 
-To build the project run:
+`
+npm run test:coverage
+`
 
-```bash
-ng build
-```
+## Lintering code
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+`
+npm run lint
+`
