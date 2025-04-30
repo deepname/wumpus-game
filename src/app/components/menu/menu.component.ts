@@ -22,13 +22,15 @@ export class MenuComponent {
     shoot: 'Space'
   };
 
+  showFog: boolean = true;
+
   constructor(
     private gameService: GameService,
     private router: Router
   ) {}
 
   startGame(): void {
-    this.gameService.initializeGame(this.boardWidth, this.boardHeight);
+    this.gameService.initializeGame(this.boardWidth, this.boardHeight, this.showFog);
     this.gameService.updateControls(this.controls);
     this.router.navigate(['/game']);
   }

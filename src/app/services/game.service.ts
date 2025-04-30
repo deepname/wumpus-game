@@ -39,11 +39,12 @@ export class GameService {
     return this.gameState.asObservable();
   }
 
-  initializeGame(width: number, height: number): void {
+  initializeGame(width: number, height: number, showFog: boolean = true): void {
     width = Math.max(this.MIN_SIZE, Math.min(width, this.MAX_SIZE));
     height = Math.max(this.MIN_SIZE, Math.min(height, this.MAX_SIZE));
     
     this.config.boardSize = { width, height };
+    (this.config as any).showFog = showFog;
 
     // Generar posiciones de wumpus y pits primero
     const wumpus = this.generateWumpusPositions();
@@ -256,5 +257,9 @@ export class GameService {
     }
 
     return warnings.join(' ');
+  }
+
+  getShowFog(): boolean {
+    return (this.config as any).showFog !== false;
   }
 }

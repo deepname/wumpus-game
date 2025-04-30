@@ -17,12 +17,23 @@ export class GameComponent implements OnInit {
   gameState$!: Observable<GameState>;
   shootMode = false;
   visited: Set<string> = new Set();
+  showFog: boolean = true;
 
   constructor(private gameService: GameService) {}
 
   ngOnInit(): void {
     this.gameState$ = this.gameService.getGameState();
+    this.showFog = this.gameService.getShowFog();
     this.gameState$.subscribe(state => {
+      if (!this.showFog) {
+        // Si la niebla está desactivada, todas las casillas son visibles
+        for (let x = 0; x < state.boardSize.width; x++) {
+          for (let y = 0; y < state.boardSize.height; y++) {
+            this.visited.add(`${x},${y}`);
+          }
+        }
+        return;
+      }
       // Marcar como visitada la casilla del hunter
       this.visited.add(`${state.hunter.x},${state.hunter.y}`);
       // Si el juego termina, mostrar todas
