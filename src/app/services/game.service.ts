@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { GameConfig, GameState, Position } from '../models/game.models';
+import { isPositionOccupied, getNearbyWarnings, checkCollisionsWithGold } from './game-logic.util';
+import { generateUniquePositions, generateWumpusPositions, generatePits, getRandomPosition } from './board-generation.util';
 
 @Injectable({
   providedIn: 'root'
@@ -33,84 +35,6 @@ export class GameService {
     }
   };
 
-  private getNearbyWarnings(position: Position): string {
-    const warnings: string[] = [];
-    const state = this.gameState.value;
-    const adjacentPositions = [
-      { x: position.x - 1, y: position.y },
-      { x: position.x + 1, y: position.y },
-      { x: position.x, y: position.y - 1 },
-      { x: position.x, y: position.y + 1 }
-    ];
-
-    if (adjacentPositions.some(pos => this.isPositionOccupied(pos, state.wumpus))) {
-      warnings.push('You smell something terrible nearby!');
-    }
-    if (adjacentPositions.some(pos => this.isPositionOccupied(pos, state.pits))) {
-      warnings.push('You feel a draft!');
-    }
-
-    return warnings.join(' ');
-  }
-
-  private generateUniquePositions(
-    count: number,
-    isValid: (pos: Position) => boolean
-  ): Position[] {
-    const positions: Position[] = [];
-    while (positions.length < count) {
-      const pos = this.getRandomPosition();
-      if (isValid(pos) && !this.isPositionOccupied(pos, positions)) {
-        positions.push(pos);
-      }
-    }
-    return positions;
-  }
-  
-  private generateWumpusPositions(): Position[] {
-    const numWumpus = Math.max(1, Math.floor((this.config.boardSize.width * this.config.boardSize.height) / 20));
-    return this.generateUniquePositions(numWumpus, (pos) => pos.x !== 0 || pos.y !== 0);
-  }
-  
-  private generatePits(): Position[] {
-    const numPits = Math.max(2, Math.floor((this.config.boardSize.width * this.config.boardSize.height) / 10));
-    const wumpusPositions = this.gameState.value.wumpus;
-    return this.generateUniquePositions(numPits, (pos) =>
-      !this.isPositionOccupied(pos, wumpusPositions)
-    );
-  }
-
-  private getRandomPosition(): Position {
-    return {
-      x: Math.floor(Math.random() * this.config.boardSize.width),
-      y: Math.floor(Math.random() * this.config.boardSize.height)
-    };
-  }
-
-  private isPositionOccupied(pos: Position, positions: Position[]): boolean {
-    return positions.some(p => p.x === pos.x && p.y === pos.y);
-  }
-
-  private checkCollisionsWithGold(state: GameState): void {
-    let newState = { ...state };
-    if (this.isPositionOccupied(state.hunter, state.wumpus)) {
-      newState = {
-        ...newState,
-        isGameOver: true,
-        message: 'Game Over Hunter! A Wumpus got you!'
-      };
-    } else if (this.isPositionOccupied(state.hunter, state.pits)) {
-      newState = {
-        ...newState,
-        isGameOver: true,
-        message: 'Game Over Hunter! You fell into a pit!'
-      };
-    }else {
-      newState.message = this.getNearbyWarnings(state.hunter);
-    }
-
-    this.gameState.next(newState);
-  }
 
   getGameState(): Observable<GameState> {
     return this.gameState.asObservable();
@@ -126,13 +50,13 @@ export class GameService {
     (this.config as { showFog?: boolean }).showFog = showFog;
 
     // Generar posiciones de wumpus y pits 
-    const wumpus = this.generateWumpusPositions();
-    const pits = this.generatePits();
+    const wumpus = generateWumpusPositions(this.config);
+    const pits = generatePits(this.config, wumpus);
 
     // Generar posición del oro en una casilla libre
     let gold: Position;
     do {
-      gold = this.getRandomPosition();
+      gold = getRandomPosition(this.config.boardSize);
     } while (
       (gold.x === 0 && gold.y === 0) ||
       wumpus.some(w => w.x === gold.x && w.y === gold.y) ||
@@ -210,7 +134,8 @@ export class GameService {
       };
     }
 
-    this.checkCollisionsWithGold(newState);
+    const resolvedState = checkCollisionsWithGold(newState);
+    this.gameState.next(resolvedState);
   }
 
   shootArrow(direction: 'up' | 'down' | 'left' | 'right'): void {
@@ -234,7 +159,7 @@ export class GameService {
         case 'right': arrowPosition.x++; break;
       }
 
-      if (this.isPositionOccupied(arrowPosition, state.wumpus)) {
+      if (isPositionOccupied(arrowPosition, state.wumpus)) {
         hitWumpus = true;
         break;
       }

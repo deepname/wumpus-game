@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { take } from 'rxjs/operators';
 import { GameService } from './game.service';
+import { isPositionOccupied, getNearbyWarnings, checkCollisionsWithGold } from './game-logic.util';
+import { generateUniquePositions, generateWumpusPositions, generatePits, getRandomPosition } from './board-generation.util';
 
 describe('GameService', () => {
   let service: GameService;
@@ -32,8 +34,8 @@ describe('GameService', () => {
   it('should limit board size to min and max values', (done) => {
     service.initializeGame(1, 1, true); // Should be adjusted to min size
     service.getGameState().pipe(take(1)).subscribe(state => {
-      expect(state.boardSize.width).toBe(3); // Min size
-      expect(state.boardSize.height).toBe(3); // Min size
+      expect(state.boardSize.width).toBe(4); // Min size
+      expect(state.boardSize.height).toBe(4); // Min size
       
       service.initializeGame(150, 150, true); // Should be adjusted to max size
       service.getGameState().pipe(take(1)).subscribe(state => {
