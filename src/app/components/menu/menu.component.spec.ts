@@ -30,8 +30,8 @@ describe('MenuComponent', () => {
   });
 
   it('should initialize with default values', () => {
-    expect(component.boardWidth).toBe(3);
-    expect(component.boardHeight).toBe(3);
+    expect(component.boardWidth).toBe(4);
+    expect(component.boardHeight).toBe(4);
     expect(component.controls).toBeDefined();
     expect(component.controls.up).toBe('ArrowUp');
     expect(component.controls.down).toBe('ArrowDown');
@@ -61,7 +61,7 @@ describe('MenuComponent', () => {
 
     component.startGame();
 
-    expect(gameService.initializeGame).toHaveBeenCalledWith(3, 3);
+    expect(gameService.initializeGame).toHaveBeenCalledWith(4, 4);
     expect(gameService.updateControls).toHaveBeenCalledWith(component.controls);
     expect(router.navigate).toHaveBeenCalledWith(['/game']);
   });

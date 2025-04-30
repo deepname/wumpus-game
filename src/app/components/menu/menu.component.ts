@@ -12,8 +12,8 @@ import { GameService } from '../../services/game.service';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent {
-  boardWidth: number = 3;
-  boardHeight: number = 3;
+  boardWidth: number = 4;
+  boardHeight: number = 4;
   controls = {
     up: 'ArrowUp',
     down: 'ArrowDown',
