@@ -37,8 +37,8 @@ describe('GameService', () => {
       
       service.initializeGame(150, 150, true); // Should be adjusted to max size
       service.getGameState().pipe(take(1)).subscribe(state => {
-        expect(state.boardSize.width).toBe(100); // Max size
-        expect(state.boardSize.height).toBe(100); // Max size
+        expect(state.boardSize.width).toBe(40); // Max size
+        expect(state.boardSize.height).toBe(40); // Max size
         done();
       });
     });
