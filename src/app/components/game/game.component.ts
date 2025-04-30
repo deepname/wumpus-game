@@ -25,18 +25,23 @@ export class GameComponent implements OnInit {
     this.gameState$ = this.gameService.getGameState();
     this.showFog = this.gameService.getShowFog();
     this.gameState$.subscribe(state => {
-      if (!this.showFog) {
-        // Si la niebla está desactivada, todas las casillas son visibles
-        for (let x = 0; x < state.boardSize.width; x++) {
-          for (let y = 0; y < state.boardSize.height; y++) {
-            this.visited.add(`${x},${y}`);
-          }
-        }
-        return;
-      }
-      // Marcar como visitada la casilla del hunter
+      // Marcar como visitada la casilla actual y las adyacentes ortogonales
       this.visited.add(`${state.hunter.x},${state.hunter.y}`);
-      // Si el juego termina, mostrar todas
+      const adj = [
+        { x: state.hunter.x - 1, y: state.hunter.y },
+        { x: state.hunter.x + 1, y: state.hunter.y },
+        { x: state.hunter.x, y: state.hunter.y - 1 },
+        { x: state.hunter.x, y: state.hunter.y + 1 }
+      ];
+      adj.forEach(pos => {
+        if (
+          pos.x >= 0 && pos.x < state.boardSize.width &&
+          pos.y >= 0 && pos.y < state.boardSize.height
+        ) {
+          this.visited.add(`${pos.x},${pos.y}`);
+        }
+      });
+      // Si el juego termina, marcar todas como visitadas
       if (state.isGameOver) {
         for (let x = 0; x < state.boardSize.width; x++) {
           for (let y = 0; y < state.boardSize.height; y++) {
@@ -48,7 +53,20 @@ export class GameComponent implements OnInit {
   }
 
   isCellVisible(x: number, y: number, state: GameState): boolean {
-    return state.isGameOver || this.visited.has(`${x},${y}`) || (state.hunter.x === x && state.hunter.y === y);
+    // Siempre visible si el juego terminó
+    if (state.isGameOver) return true;
+    // Siempre visible si está visitada
+    if (this.visited.has(`${x},${y}`)) return true;
+    // Siempre visible si es la posición actual
+    if (state.hunter.x === x && state.hunter.y === y) return true;
+    // Adyacentes ortogonales
+    const adj = [
+      { x: state.hunter.x - 1, y: state.hunter.y },
+      { x: state.hunter.x + 1, y: state.hunter.y },
+      { x: state.hunter.x, y: state.hunter.y - 1 },
+      { x: state.hunter.x, y: state.hunter.y + 1 }
+    ];
+    return adj.some(pos => pos.x === x && pos.y === y);
   }
 
   @HostListener('window:keydown', ['$event'])
