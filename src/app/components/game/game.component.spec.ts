@@ -18,6 +18,8 @@ describe('GameComponent', () => {
       hunter: { x: 0, y: 0 },
       wumpus: [{ x: 2, y: 2 }],
       pits: [{ x: 1, y: 1 }],
+      gold: { x: 1, y: 2 },
+      hasGold: false,
       arrows: 3,
       isGameOver: false,
       message: '',
@@ -27,6 +29,7 @@ describe('GameComponent', () => {
     mockGameState = new BehaviorSubject<GameState>(initialState);
 
     const mockGameService = {
+      getShowFog: () => true,
       getGameState: () => mockGameState.asObservable(),
       moveHunter: jasmine.createSpy('moveHunter'),
       shootArrow: jasmine.createSpy('shootArrow')

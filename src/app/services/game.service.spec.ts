@@ -15,7 +15,7 @@ describe('GameService', () => {
   });
 
   it('should initialize game with valid board size', () => {
-    service.initializeGame(5, 5);
+    service.initializeGame(5, 5, true);
     service.getGameState().subscribe(state => {
       expect(state.boardSize.width).toBe(5);
       expect(state.boardSize.height).toBe(5);
@@ -23,17 +23,19 @@ describe('GameService', () => {
       expect(state.wumpus.length).toBeGreaterThan(0);
       expect(state.pits.length).toBeGreaterThan(0);
       expect(state.arrows).toBeGreaterThan(0);
+      expect(state.gold).toBeDefined();
+      expect(state.hasGold).toBeDefined();
       expect(state.isGameOver).toBeFalse();
     });
   });
 
   it('should limit board size to min and max values', (done) => {
-    service.initializeGame(1, 1); // Should be adjusted to min size
+    service.initializeGame(1, 1, true); // Should be adjusted to min size
     service.getGameState().pipe(take(1)).subscribe(state => {
       expect(state.boardSize.width).toBe(3); // Min size
       expect(state.boardSize.height).toBe(3); // Min size
       
-      service.initializeGame(150, 150); // Should be adjusted to max size
+      service.initializeGame(150, 150, true); // Should be adjusted to max size
       service.getGameState().pipe(take(1)).subscribe(state => {
         expect(state.boardSize.width).toBe(100); // Max size
         expect(state.boardSize.height).toBe(100); // Max size
@@ -43,7 +45,7 @@ describe('GameService', () => {
   });
 
   it('should handle hunter movement within bounds', (done) => {
-    service.initializeGame(3, 3);
+    service.initializeGame(3, 3, true);
     service.getGameState().pipe(take(1)).subscribe(state => {
       const initialX = state.hunter.x;
       const initialY = state.hunter.y;
@@ -57,7 +59,7 @@ describe('GameService', () => {
   });
 
   it('should handle arrow shooting', (done) => {
-    service.initializeGame(3, 3);
+    service.initializeGame(3, 3, true);
     let initialArrows: number;
     service.getGameState().pipe(take(1)).subscribe(state => {
       initialArrows = state.arrows;

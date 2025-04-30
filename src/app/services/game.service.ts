@@ -37,7 +37,7 @@ export class GameService {
     return this.gameState.asObservable();
   }
 
-  initializeGame(width: number, height: number, showFog: true): void {
+  initializeGame(width: number, height: number, showFog: boolean = true): void {
     width = Math.max(this.MIN_SIZE, Math.min(width, this.MAX_SIZE));
     height = Math.max(this.MIN_SIZE, Math.min(height, this.MAX_SIZE));
     
