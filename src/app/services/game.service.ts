@@ -35,6 +35,7 @@ export class GameService {
 
   private getNearbyWarnings(position: Position): string {
     const warnings: string[] = [];
+    const state = this.gameState.value;
     const adjacentPositions = [
       { x: position.x - 1, y: position.y },
       { x: position.x + 1, y: position.y },
@@ -42,43 +43,41 @@ export class GameService {
       { x: position.x, y: position.y + 1 }
     ];
 
-    if (adjacentPositions.some(pos => this.isPositionOccupied(pos, this.gameState.value.wumpus))) {
+    if (adjacentPositions.some(pos => this.isPositionOccupied(pos, state.wumpus))) {
       warnings.push('You smell something terrible nearby!');
     }
-    if (adjacentPositions.some(pos => this.isPositionOccupied(pos, this.gameState.value.pits))) {
+    if (adjacentPositions.some(pos => this.isPositionOccupied(pos, state.pits))) {
       warnings.push('You feel a draft!');
     }
 
     return warnings.join(' ');
   }
 
-  private generateWumpusPositions(): Position[] {
-    const numWumpus = Math.max(1, Math.floor((this.config.boardSize.width * this.config.boardSize.height) / 20));
+  private generateUniquePositions(
+    count: number,
+    isValid: (pos: Position) => boolean
+  ): Position[] {
     const positions: Position[] = [];
-    
-    while (positions.length < numWumpus) {
+    while (positions.length < count) {
       const pos = this.getRandomPosition();
-      // No permitir Wumpus en la casilla de inicio del hunter
-      if ((pos.x !== 0 || pos.y !== 0) && !this.isPositionOccupied(pos, positions)) {
+      if (isValid(pos) && !this.isPositionOccupied(pos, positions)) {
         positions.push(pos);
       }
     }
-    
     return positions;
   }
-
+  
+  private generateWumpusPositions(): Position[] {
+    const numWumpus = Math.max(1, Math.floor((this.config.boardSize.width * this.config.boardSize.height) / 20));
+    return this.generateUniquePositions(numWumpus, (pos) => pos.x !== 0 || pos.y !== 0);
+  }
+  
   private generatePits(): Position[] {
     const numPits = Math.max(2, Math.floor((this.config.boardSize.width * this.config.boardSize.height) / 10));
-    const positions: Position[] = [];
-    
-    while (positions.length < numPits) {
-      const pos = this.getRandomPosition();
-      if (!this.isPositionOccupied(pos, positions) && !this.isPositionOccupied(pos, this.gameState.value.wumpus)) {
-        positions.push(pos);
-      }
-    }
-    
-    return positions;
+    const wumpusPositions = this.gameState.value.wumpus;
+    return this.generateUniquePositions(numPits, (pos) =>
+      !this.isPositionOccupied(pos, wumpusPositions)
+    );
   }
 
   private getRandomPosition(): Position {
@@ -92,7 +91,6 @@ export class GameService {
     return positions.some(p => p.x === pos.x && p.y === pos.y);
   }
 
-  // Nueva función para comprobar colisiones y oro
   private checkCollisionsWithGold(state: GameState): void {
     let newState = { ...state };
     if (this.isPositionOccupied(state.hunter, state.wumpus)) {
@@ -119,15 +117,18 @@ export class GameService {
   }
 
   initializeGame(width: number, height: number, showFog: boolean = true): void {
+    // Ajusta el tamaño del tablero al rango permitido
     width = Math.max(this.MIN_SIZE, Math.min(width, this.MAX_SIZE));
     height = Math.max(this.MIN_SIZE, Math.min(height, this.MAX_SIZE));
     
+    // Genera el tablero
     this.config.boardSize = { width, height };
     (this.config as { showFog?: boolean }).showFog = showFog;
 
-    // Generar posiciones de wumpus y pits primero
+    // Generar posiciones de wumpus y pits 
     const wumpus = this.generateWumpusPositions();
     const pits = this.generatePits();
+
     // Generar posición del oro en una casilla libre
     let gold: Position;
     do {
@@ -138,6 +139,7 @@ export class GameService {
       pits.some(p => p.x === gold.x && p.y === gold.y)
     );
 
+    // Generar el estado inicial
     const newState: GameState = {
       hunter: { x: 0, y: 0 },
       wumpus,
@@ -162,37 +164,52 @@ export class GameService {
 
     const currentState = this.gameState.value;
     const newPosition = { ...currentState.hunter };
+    const { width, height } = this.config.boardSize;
 
     switch (direction) {
       case 'up':
         if (newPosition.y > 0) newPosition.y--;
         break;
       case 'down':
-        if (newPosition.y < this.config.boardSize.height - 1) newPosition.y++;
+        if (newPosition.y < height - 1) newPosition.y++;
         break;
       case 'left':
         if (newPosition.x > 0) newPosition.x--;
         break;
       case 'right':
-        if (newPosition.x < this.config.boardSize.width - 1) newPosition.x++;
+        if (newPosition.x < width - 1) newPosition.x++;
         break;
     }
 
     let newState = { ...currentState, hunter: newPosition };
 
+    const isAtGold = !currentState.hasGold && newPosition.x === currentState.gold.x && newPosition.y === currentState.gold.y;
+    const isAtEntranceWithGold = newState.hasGold && newPosition.x === 0 && newPosition.y === 0;
+    const isAtEntranceWithoutGold = !newState.hasGold && newPosition.x === 0 && newPosition.y === 0 && currentState.hasGold;
+
     // Si el cazador recoge el oro
-    if (!currentState.hasGold && newPosition.x === currentState.gold.x && newPosition.y === currentState.gold.y) {
-      newState = { ...newState, hasGold: true, message: 'You picked up the gold! Return to the entrance to win!' };
+    if (isAtGold) {
+      newState = { 
+        ...newState, 
+        hasGold: true, 
+        message: 'You picked up the gold! Return to the entrance to win!' 
+      };
     }
     // Si el cazador tiene el oro y vuelve a la entrada
-    if (newState.hasGold && newPosition.x === 0 && newPosition.y === 0) {
-      newState = { ...newState, isGameOver: true, message: 'Congratulations! You escaped with the gold!' };
-    } else if (!newState.hasGold && newPosition.x === 0 && newPosition.y === 0 && currentState.hasGold) {
+    if (isAtEntranceWithGold) {
+      newState = { 
+        ...newState, 
+        isGameOver: true, 
+        message: 'Congratulations! You escaped with the gold!' 
+      };
+    } else if (isAtEntranceWithoutGold) {
       // Si vuelve a la salida sin el oro, no gana
-      newState = { ...newState, message: 'You must collect the gold and return to the entrance!' };
+      newState = { 
+        ...newState, 
+        message: 'You must collect the gold and return to the entrance!' 
+      };
     }
 
-    // Mantén la lógica de colisiones existente
     this.checkCollisionsWithGold(newState);
   }
 
@@ -202,12 +219,13 @@ export class GameService {
 
     const arrowPosition = { ...state.hunter };
     let hitWumpus = false;
+    const { width, height } = this.config.boardSize;
 
     while (
       arrowPosition.x >= 0 && 
-      arrowPosition.x < this.config.boardSize.width &&
+      arrowPosition.x < width &&
       arrowPosition.y >= 0 && 
-      arrowPosition.y < this.config.boardSize.height
+      arrowPosition.y < height
     ) {
       switch (direction) {
         case 'up': arrowPosition.y--; break;
@@ -222,10 +240,12 @@ export class GameService {
       }
     }
 
-    const newState = {
+    const updatedWumpus = hitWumpus ? state.wumpus.filter(w => !(w.x === arrowPosition.x && w.y === arrowPosition.y)) : state.wumpus;
+
+    const newState: GameState = {
       ...state,
       arrows: state.arrows - 1,
-      wumpus: hitWumpus ? state.wumpus.filter(w => w.x !== arrowPosition.x || w.y !== arrowPosition.y) : state.wumpus,
+      wumpus: updatedWumpus,
       message: hitWumpus ? 'You hit a Wumpus!' : 'Arrow missed!'
     };
 
