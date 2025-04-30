@@ -36,7 +36,7 @@ export class MenuComponent {
   }
 
   get boardSizeValid(): boolean {
-    return this.boardWidth >= 4 && this.boardHeight >= 4;
+    return this.boardWidth >= this.gameService.MIN_SIZE && this.boardHeight >= this.gameService.MIN_SIZE;
   }
 
   updateControl(control: string, event: KeyboardEvent): void {

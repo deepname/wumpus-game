@@ -22,7 +22,9 @@ export class GameComponent implements OnInit, AfterViewInit {
   @ViewChild('gameBoard', { static: false }) gameBoardRef!: ElementRef<HTMLDivElement>;
   hunterPosition = { x: 0, y: 0 };
 
-  constructor(private gameService: GameService) {}
+  constructor(
+    private gameService: GameService
+  ) {}
 
   ngOnInit(): void {
     this.gameState$ = this.gameService.getGameState();

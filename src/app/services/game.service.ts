@@ -6,10 +6,10 @@ import { GameConfig, GameState, Position } from '../models/game.models';
   providedIn: 'root'
 })
 export class GameService {
-  private readonly MIN_SIZE = 4;
+  public readonly MIN_SIZE = 4;
   private readonly MAX_SIZE = 40;
   private readonly DEFAULT_ARROWS = 3;
-
+  
   private gameState = new BehaviorSubject<GameState>({
     hunter: { x: 0, y: 0 },
     wumpus: [],
