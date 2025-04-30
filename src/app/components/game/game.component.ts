@@ -16,8 +16,8 @@ import { RangePipe } from '../../pipes/range.pipe';
 export class GameComponent implements OnInit, AfterViewInit {
   gameState$!: Observable<GameState>;
   shootMode = false;
-  visited: Set<string> = new Set();
-  showFog: boolean = true;
+  visited = new Set<string>();
+  showFog = true;
 
   @ViewChild('gameBoard', { static: false }) gameBoardRef!: ElementRef<HTMLDivElement>;
   hunterPosition = { x: 0, y: 0 };

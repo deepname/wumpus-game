@@ -12,8 +12,8 @@ import { GameService } from '../../services/game.service';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent {
-  boardWidth: number = 4;
-  boardHeight: number = 4;
+  boardWidth = 10;
+  boardHeight = 10;
   controls = {
     up: 'ArrowUp',
     down: 'ArrowDown',
@@ -22,7 +22,7 @@ export class MenuComponent {
     shoot: 'Space'
   };
 
-  showFog: boolean = true;
+  showFog = true;
 
   constructor(
     private gameService: GameService,
