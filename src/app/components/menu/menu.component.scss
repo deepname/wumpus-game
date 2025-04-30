@@ -40,23 +40,23 @@
 
     label {
       font-weight: 500;
-      color: #555;
+      color: $text-color;
     }
 
     input {
       padding: px-to-rem(8);
-      border: px-to-rem(1) solid #ddd;
+      border: px-to-rem(1) solid $surface-color;
       border-radius: px-to-rem(4);
       font-size: px-to-rem(16);
 
       &[readonly] {
-        background-color: #eee;
+        background-color: $surface-color-dark;
         cursor: pointer;
       }
 
       &:focus {
         outline: none;
-        border-color: #007bff;
+        border-color: $primary-color;
         box-shadow: 0 0 0 px-to-rem(2) rgba(0, 123, 255, 0.25);
       }
     }
@@ -66,20 +66,20 @@
     display: block;
     width: 100%;
     padding: px-to-rem(16);
-    background-color: #007bff;
-    color: white;
+    background-color: $primary-color;
+    color: $white;
     border: none;
     border-radius: px-to-rem(4);
     font-size: px-to-rem(18);
     cursor: pointer;
     transition: background-color 0.2s;
-
-    &:hover {
-      background-color: #0056b3;
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
-    &:active {
-      background-color: #004085;
+    &:hover {
+      background-color: $primary-color-dark;
     }
   }
 }

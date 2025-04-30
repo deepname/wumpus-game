@@ -69,7 +69,7 @@
     margin-top: 2rem;
 
     p {
-      color: #666;
+      color: $text-color;
       margin: 0.5rem 0;
     }
 
@@ -77,14 +77,14 @@
       display: inline-block;
       margin-top: 1rem;
       padding: px-to-rem(8) px-to-rem(16);
-      background-color: #6c757d;
-      color: white;
+      background-color: $primary-color;
+      color: $white;
       text-decoration: none;
       border-radius: px-to-rem(4);
       transition: background-color 0.2s;
 
       &:hover {
-        background-color: #29475f;
+        background-color: $primary-color-dark;
       }
     }
   }
