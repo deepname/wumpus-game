@@ -41,6 +41,8 @@ npm run test
 npm run test:coverage
 `
 
+[coverage report (you must run the previous command)](/coverage/wumpus-game/index.html)
+
 ## Lintering code
 
 `
