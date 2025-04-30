@@ -1,0 +1,6 @@
+// Utilidad para convertir px a rem
+$base-font-size: 16 !default;
+
+@function px-to-rem($px, $base: $base-font-size) {
+  @return ($px / $base) * 1rem;
+}
