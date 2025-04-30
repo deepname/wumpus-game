@@ -18,6 +18,8 @@ export interface Position {
 }
 
 export interface GameState {
+  gold: Position;
+  hasGold: boolean;
   hunter: Position;
   wumpus: Position[];
   pits: Position[];

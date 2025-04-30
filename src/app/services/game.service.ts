@@ -14,6 +14,8 @@ export class GameService {
     hunter: { x: 0, y: 0 },
     wumpus: [],
     pits: [],
+    gold: { x: 0, y: 0 },
+    hasGold: false,
     arrows: this.DEFAULT_ARROWS,
     isGameOver: false,
     message: '',
@@ -42,14 +44,29 @@ export class GameService {
     height = Math.max(this.MIN_SIZE, Math.min(height, this.MAX_SIZE));
     
     this.config.boardSize = { width, height };
-    
+
+    // Generar posiciones de wumpus y pits primero
+    const wumpus = this.generateWumpusPositions();
+    const pits = this.generatePits();
+    // Generar posición del oro en una casilla libre
+    let gold: Position;
+    do {
+      gold = this.getRandomPosition();
+    } while (
+      (gold.x === 0 && gold.y === 0) ||
+      wumpus.some(w => w.x === gold.x && w.y === gold.y) ||
+      pits.some(p => p.x === gold.x && p.y === gold.y)
+    );
+
     const newState: GameState = {
       hunter: { x: 0, y: 0 },
-      wumpus: this.generateWumpusPositions(),
-      pits: this.generatePits(),
+      wumpus,
+      pits,
+      gold,
+      hasGold: false,
       arrows: this.DEFAULT_ARROWS,
       isGameOver: false,
-      message: 'Game started! Hunt the Wumpus!',
+      message: 'Game started! Hunt the Wumpus and find the gold!',
       boardSize: { width, height }
     };
     
@@ -66,7 +83,8 @@ export class GameService {
     
     while (positions.length < numWumpus) {
       const pos = this.getRandomPosition();
-      if (!this.isPositionOccupied(pos, positions)) {
+      // No permitir Wumpus en la casilla de inicio del hunter
+      if ((pos.x !== 0 || pos.y !== 0) && !this.isPositionOccupied(pos, positions)) {
         positions.push(pos);
       }
     }
@@ -120,7 +138,38 @@ export class GameService {
         break;
     }
 
-    this.checkCollisions(newPosition);
+    let newState = { ...currentState, hunter: newPosition };
+
+    // Si el cazador recoge el oro
+    if (!currentState.hasGold && newPosition.x === currentState.gold.x && newPosition.y === currentState.gold.y) {
+      newState = { ...newState, hasGold: true, message: 'You picked up the gold! Return to the entrance to win!' };
+    }
+    // Si el cazador tiene el oro y vuelve a la entrada
+    if (newState.hasGold && newPosition.x === 0 && newPosition.y === 0) {
+      newState = { ...newState, isGameOver: true, message: 'Congratulations! You escaped with the gold!' };
+    }
+
+    // Mantén la lógica de colisiones existente
+    this.checkCollisionsWithGold(newState);
+  }
+
+  // Nueva función para comprobar colisiones y oro
+  private checkCollisionsWithGold(state: GameState): void {
+    let newState = { ...state };
+    if (this.isPositionOccupied(state.hunter, state.wumpus)) {
+      newState = {
+        ...newState,
+        isGameOver: true,
+        message: 'Game Over Hunter! A Wumpus got you!'
+      };
+    } else if (this.isPositionOccupied(state.hunter, state.pits)) {
+      newState = {
+        ...newState,
+        isGameOver: true,
+        message: 'Game Over Hunter! You fell into a pit!'
+      };
+    }
+    this.gameState.next(newState);
   }
 
   shootArrow(direction: 'up' | 'down' | 'left' | 'right'): void {

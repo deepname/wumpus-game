@@ -77,6 +77,8 @@ export class GameComponent implements OnInit {
       return '👾';
     } else if (state.pits.some(p => p.x === x && p.y === y)) {
       return '⚫';
+    } else if (!state.hasGold && state.gold.x === x && state.gold.y === y) {
+      return '💰';
     }
     return this.getAdjacentEffects(x, y, state);
   }
