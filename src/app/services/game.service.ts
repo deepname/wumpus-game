@@ -7,7 +7,7 @@ import { GameConfig, GameState, Position } from '../models/game.models';
 })
 export class GameService {
   private readonly MIN_SIZE = 3;
-  private readonly MAX_SIZE = 100;
+  private readonly MAX_SIZE = 40;
   private readonly DEFAULT_ARROWS = 3;
 
   private gameState = new BehaviorSubject<GameState>({
