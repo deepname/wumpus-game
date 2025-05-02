@@ -22,6 +22,11 @@
     </div>
   </div>
 
+  <app-mobile-controls *ngIf="isMobile"
+    (move)="onMobileMove($event)"
+    (shoot)="onMobileShoot()">
+  </app-mobile-controls>
+
   <div class="controls-info">
     <p>Use arrow keys to move</p>
     <p>Press SPACE + arrow key to shoot</p>

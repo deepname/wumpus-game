@@ -5,11 +5,12 @@ import { Observable } from 'rxjs';
 import { GameService } from '../../services/game.service';
 import { GameState } from '../../models/game.models';
 import { RangePipe } from '../../pipes/range.pipe';
+import { MobileControlsComponent } from '../mobile-controls/mobile-controls.component';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, RouterModule, RangePipe],
+  imports: [CommonModule, RouterModule, RangePipe, MobileControlsComponent],
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
@@ -18,6 +19,7 @@ export class GameComponent implements OnInit, AfterViewInit {
   shootMode = false;
   visited = new Set<string>();
   showFog = true;
+  isMobile = false;
 
   @ViewChild('gameBoard', { static: false }) gameBoardRef!: ElementRef<HTMLDivElement>;
   hunterPosition = { x: 0, y: 0 };
@@ -27,6 +29,7 @@ export class GameComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
+    this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     this.gameState$ = this.gameService.getGameState();
     this.showFog = this.gameService.getShowFog();
     this.gameState$.subscribe(state => {
@@ -196,5 +199,18 @@ export class GameComponent implements OnInit, AfterViewInit {
       }
     }
     return board;
+  }
+
+  // Manejar eventos de los controles móviles
+  onMobileMove(dir: 'up' | 'down' | 'left' | 'right') {
+    if (this.shootMode) {
+      this.gameService.shootArrow(dir);
+      this.shootMode = false;
+    } else {
+      this.gameService.moveHunter(dir);
+    }
+  }
+  onMobileShoot() {
+    this.shootMode = !this.shootMode;
   }
 }

@@ -1,0 +1,13 @@
+<div class="mobile-controls">
+  <div class="row">
+    <button (click)="move.emit('up')">⬆️</button>
+  </div>
+  <div class="row">
+    <button (click)="move.emit('left')">⬅️</button>
+    <button (click)="shoot.emit()">🏹</button>
+    <button (click)="move.emit('right')">➡️</button>
+  </div>
+  <div class="row">
+    <button (click)="move.emit('down')">⬇️</button>
+  </div>
+</div>
