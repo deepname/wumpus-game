@@ -48,3 +48,29 @@ npm run test:coverage
 `
 npm run lint
 `
+
+---
+
+## Despliegue en GitHub Pages
+
+Este proyecto se puede ver en vivo en: [https://deepname.github.io/wumpus-game/](https://deepname.github.io/wumpus-game/)
+
+### Cómo desplegar una nueva versión
+
+1. Ejecuta el siguiente comando para generar el build en la carpeta `docs/` con la ruta base correcta:
+
+   ```bash
+   npx ng build --output-path docs --base-href /wumpus-game/
+   ```
+
+2. Haz commit y push de la carpeta `docs/` al repositorio:
+
+   ```bash
+   git add docs
+   git commit -m "build: producción para GitHub Pages"
+   git push
+   ```
+
+3. Asegúrate de que GitHub Pages esté configurado para servir desde la carpeta `/docs` en la rama `main`.
+
+En unos minutos, los cambios estarán reflejados en la URL pública.
