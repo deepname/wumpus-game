@@ -51,19 +51,19 @@ npm run lint
 
 ---
 
-## Despliegue en GitHub Pages
+## Deploy on GitHub Pages
 
-Este proyecto se puede ver en vivo en: [https://deepname.github.io/wumpus-game/](https://deepname.github.io/wumpus-game/)
+This project can be viewed live at: [https://deepname.github.io/wumpus-game/](https://deepname.github.io/wumpus-game/)
 
-### Cómo desplegar una nueva versión
+### How to deploy a new version
 
-1. Ejecuta el siguiente comando para generar el build en la carpeta `docs/` con la ruta base correcta:
-
+1. Run the following command to generate the build in the `docs/` folder with the correct base path:
+   
    ```bash
    npx ng build --output-path docs --base-href /wumpus-game/
    ```
 
-2. Haz commit y push de la carpeta `docs/` al repositorio:
+3. Commit and push the `docs/` folder to the repository:
 
    ```bash
    git add docs
@@ -71,6 +71,6 @@ Este proyecto se puede ver en vivo en: [https://deepname.github.io/wumpus-game/]
    git push
    ```
 
-3. Asegúrate de que GitHub Pages esté configurado para servir desde la carpeta `/docs` en la rama `main`.
+4. Make sure GitHub Pages is configured to serve from the `/docs` folder on the `main` branch.
 
-En unos minutos, los cambios estarán reflejados en la URL pública.
+In a few minutes, the changes will be reflected in the public [URL](https://deepname.github.io/wumpus-game/).
