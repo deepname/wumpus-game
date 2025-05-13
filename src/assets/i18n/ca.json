@@ -1,0 +1,35 @@
+{
+  "menu": {
+    "title": "Caça el Wumpus",
+    "start": "Començar Joc",
+    "instructions": "Instruccions",
+    "language": "Idioma",
+    "boardSize": "Mida del Tauler",
+    "width": "Amplada",
+    "height": "Alçada",
+    "controlsTitle": "Configuració dels Controls",
+    "controls": {
+      "up": "Moure Amunt",
+      "down": "Moure Avall",
+      "left": "Moure Esquerra",
+      "right": "Moure Dreta",
+      "shoot": "Disparar Fletxa"
+    },
+    "fog": "Activar boira (boira de guerra)",
+    "languages": {
+      "en": "English",
+      "es": "Español",
+      "ca": "Català",
+      "gl": "Galego",
+      "eu": "Euskara"
+    }
+  },
+  "game": {
+    "score": "Puntuació",
+    "arrows": "Fletxes",
+    "gameOver": "Joc Acabat",
+    "win": "Has Guanyat!",
+    "restart": "Reiniciar",
+    "back": "Tornar al Menú"
+  }
+}

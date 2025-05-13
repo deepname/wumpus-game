@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { GameConfig, GameState, Position } from '../models/game.models';
+import { ControlsConfig } from '../models/controls.model';
 import { isPositionOccupied, getNearbyWarnings, checkCollisionsWithGold } from './game-logic.util';
 import { generateUniquePositions, generateWumpusPositions, generatePits, getRandomPosition } from './board-generation.util';
 
@@ -40,7 +41,7 @@ export class GameService {
     return this.gameState.asObservable();
   }
 
-  initializeGame(width: number, height: number, showFog: boolean = true): void {
+  initializeGame(width: number, height: number, showFog: boolean = true, controls?: ControlsConfig): void {
     // Ajusta el tamaño del tablero al rango permitido
     width = Math.max(this.MIN_SIZE, Math.min(width, this.MAX_SIZE));
     height = Math.max(this.MIN_SIZE, Math.min(height, this.MAX_SIZE));
@@ -48,6 +49,11 @@ export class GameService {
     // Genera el tablero
     this.config.boardSize = { width, height };
     (this.config as { showFog?: boolean }).showFog = showFog;
+    
+    // Actualiza los controles si se proporcionan
+    if (controls) {
+      this.config.controls = controls;
+    }
 
     // Generar posiciones de wumpus y pits 
     const wumpus = generateWumpusPositions(this.config);

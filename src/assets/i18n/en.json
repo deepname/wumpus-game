@@ -1,0 +1,35 @@
+{
+  "menu": {
+    "title": "Hunt the Wumpus",
+    "start": "Start Game",
+    "instructions": "Instructions",
+    "language": "Language",
+    "boardSize": "Board Size",
+    "width": "Width",
+    "height": "Height",
+    "controlsTitle": "Controls Configuration",
+    "controls": {
+      "up": "Move Up",
+      "down": "Move Down",
+      "left": "Move Left",
+      "right": "Move Right",
+      "shoot": "Shoot Arrow"
+    },
+    "fog": "Activate fog (fog of war)",
+    "languages": {
+      "en": "English",
+      "es": "Español",
+      "ca": "Català",
+      "gl": "Galego",
+      "eu": "Euskara"
+    }
+  },
+  "game": {
+    "score": "Score",
+    "arrows": "Arrows",
+    "gameOver": "Game Over",
+    "win": "You Win!",
+    "restart": "Restart",
+    "back": "Back to Menu"
+  }
+}

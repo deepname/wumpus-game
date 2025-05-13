@@ -1,0 +1,35 @@
+{
+  "menu": {
+    "title": "Caza ao Wumpus",
+    "start": "Comezar Xogo",
+    "instructions": "Instrucións",
+    "language": "Idioma",
+    "boardSize": "Tamaño do Taboleiro",
+    "width": "Ancho",
+    "height": "Alto",
+    "controlsTitle": "Configuración dos Controis",
+    "controls": {
+      "up": "Mover Arriba",
+      "down": "Mover Abaixo",
+      "left": "Mover Esquerda",
+      "right": "Mover Dereita",
+      "shoot": "Disparar Frecha"
+    },
+    "fog": "Activar néboa (néboa de guerra)",
+    "languages": {
+      "en": "English",
+      "es": "Español",
+      "ca": "Català",
+      "gl": "Galego",
+      "eu": "Euskara"
+    }
+  },
+  "game": {
+    "score": "Puntuación",
+    "arrows": "Frechas",
+    "gameOver": "Xogo Rematado",
+    "win": "Gañaches!",
+    "restart": "Reiniciar",
+    "back": "Volver ao Menú"
+  }
+}

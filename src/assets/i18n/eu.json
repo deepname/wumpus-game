@@ -1,0 +1,35 @@
+{
+  "menu": {
+    "title": "Wumpus Ehiza",
+    "start": "Hasi Jokoa",
+    "instructions": "Argibideak",
+    "language": "Hizkuntza",
+    "boardSize": "Taularen Tamaina",
+    "width": "Zabalera",
+    "height": "Altuera",
+    "controlsTitle": "Kontrolen Konfigurazioa",
+    "controls": {
+      "up": "Gora Mugitu",
+      "down": "Behera Mugitu",
+      "left": "Ezkerrera Mugitu",
+      "right": "Eskuinera Mugitu",
+      "shoot": "Gezia Jaurti"
+    },
+    "fog": "Lainoa aktibatu (gerra-lainoa)",
+    "languages": {
+      "en": "English",
+      "es": "Español",
+      "ca": "Català",
+      "gl": "Galego",
+      "eu": "Euskara"
+    }
+  },
+  "game": {
+    "score": "Puntuazioa",
+    "arrows": "Geziak",
+    "gameOver": "Jokoa Amaitu Da",
+    "win": "Irabazi Duzu!",
+    "restart": "Berriz Hasi",
+    "back": "Menura Itzuli"
+  }
+}

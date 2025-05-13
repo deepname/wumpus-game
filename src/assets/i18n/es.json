@@ -1,0 +1,35 @@
+{
+  "menu": {
+    "title": "Caza al Wumpus",
+    "start": "Comenzar Juego",
+    "instructions": "Instrucciones",
+    "language": "Idioma",
+    "boardSize": "Tamaño del Tablero",
+    "width": "Ancho",
+    "height": "Alto",
+    "controlsTitle": "Configuración de Controles",
+    "controls": {
+      "up": "Mover Arriba",
+      "down": "Mover Abajo",
+      "left": "Mover Izquierda",
+      "right": "Mover Derecha",
+      "shoot": "Disparar Flecha"
+    },
+    "fog": "Activar niebla (niebla de guerra)",
+    "languages": {
+      "en": "English",
+      "es": "Español",
+      "ca": "Català",
+      "gl": "Galego",
+      "eu": "Euskara"
+    }
+  },
+  "game": {
+    "score": "Puntuación",
+    "arrows": "Flechas",
+    "gameOver": "Juego Terminado",
+    "win": "¡Has Ganado!",
+    "restart": "Reiniciar",
+    "back": "Volver al Menú"
+  }
+}
