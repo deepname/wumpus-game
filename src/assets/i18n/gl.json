@@ -27,9 +27,23 @@
   "game": {
     "score": "Puntuación",
     "arrows": "Frechas",
+    "shootingMode": "Modo de disparo activo",
+    "useArrows": "Usa as frechas para moverte",
+    "pressSpace": "Preme ESPAZO + frecha para disparar",
     "gameOver": "Xogo Rematado",
     "win": "Gañaches!",
     "restart": "Reiniciar",
-    "back": "Volver ao Menú"
+    "back": "Volver ao Menú",
+    "start": "O xogo comezou! Caza ao Wumpus e atopa o ouro!",
+    "pickGold": "Recolliches o ouro! Volve á entrada para gañar!",
+    "escaped": "Parabéns! Escapaches co ouro!",
+    "needGold": "Tes que recoller o ouro e volver á entrada!",
+    "hitWumpus": "Dáche a un Wumpus!",
+    "arrowMissed": "Frecha fallada!",
+    "noArrows": "Fin do xogo! Sen frechas!",
+    "overWumpus": "Fin do xogo! Un Wumpus atrapoute!",
+    "overPit": "Fin do xogo! Caíches nun pozo!",
+    "warningWumpus": "Cheira algo terrible preto!",
+    "warningPit": "Sentes unha corrente de aire!"
   }
 }

@@ -1,8 +1,8 @@
 <div class="game-container" *ngIf="gameState$ | async as gameState">
   <div class="game-info">
-    <div class="arrows">Arrows: {{gameState.arrows}}</div>
+    <div class="arrows">{{ 'game.arrows' | translate }}: {{gameState.arrows}}</div>
     <div class="message" [class.game-over]="gameState.isGameOver">{{gameState.message}}</div>
-    <div class="shooting-mode" *ngIf="shootMode">Shooting Mode Active</div>
+    <div class="shooting-mode" *ngIf="shootMode">{{ 'game.shootingMode' | translate }}</div>
   </div>
 
   <div #gameBoard class="game-board" [ngClass]="{
@@ -28,8 +28,8 @@
   </app-mobile-controls>
 
   <div class="controls-info">
-    <p>Use arrow keys to move</p>
-    <p>Press SPACE + arrow key to shoot</p>
-    <a routerLink="/" class="back-button">Back to Menu</a>
+    <p>{{ 'game.useArrows' | translate }}</p>
+    <p>{{ 'game.pressSpace' | translate }}</p>
+    <a routerLink="/" class="back-button">{{ 'game.back' | translate }}</a>
   </div>
 </div>

@@ -35,4 +35,8 @@ export class TranslationService {
       { code: 'eu', name: 'Euskara' }
     ];
   }
+
+  public instant(key: string): string {
+    return this.translate.instant(key);
+  }
 }

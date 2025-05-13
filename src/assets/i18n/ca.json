@@ -27,9 +27,23 @@
   "game": {
     "score": "Puntuació",
     "arrows": "Fletxes",
+    "shootingMode": "Mode de dispar actiu",
+    "useArrows": "Utilitza les fletxes per moure't",
+    "pressSpace": "Prem ESPAI + fletxa per disparar",
     "gameOver": "Joc Acabat",
-    "win": "Has Guanyat!",
     "restart": "Reiniciar",
-    "back": "Tornar al Menú"
+    "back": "Tornar al Menú",
+    "start": "El joc ha començat! Caça el Wumpus i troba l'or!",
+    "pickGold": "Has recollit l'or! Torna a l'entrada per guanyar!",
+    "escaped": "Enhorabona! Has escapat amb l'or!",
+    "needGold": "Has de recollir l'or i tornar a l'entrada!",
+    "hitWumpus": "Has encertat un Wumpus!",
+    "arrowMissed": "Fletxa fallida!",
+    "win": "Enhorabona! Has guanyat!",
+    "noArrows": "Fi del joc! Sense fletxes!",
+    "overWumpus": "Fi del joc! Un Wumpus t'ha atrapat!",
+    "overPit": "Fi del joc! Has caigut en un pou!",
+    "warningWumpus": "Sents una olor terrible a prop!",
+    "warningPit": "Sents una corrent d'aire!"
   }
 }

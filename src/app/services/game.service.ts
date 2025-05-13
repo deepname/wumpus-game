@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { GameConfig, GameState, Position } from '../models/game.models';
 import { ControlsConfig } from '../models/controls.model';
 import { isPositionOccupied, getNearbyWarnings, checkCollisionsWithGold } from './game-logic.util';
+import { TranslationService } from './translation.service';
 import { generateUniquePositions, generateWumpusPositions, generatePits, getRandomPosition } from './board-generation.util';
 
 @Injectable({
@@ -36,6 +37,7 @@ export class GameService {
     }
   };
 
+  constructor(private translationService: TranslationService) {}
 
   getGameState(): Observable<GameState> {
     return this.gameState.asObservable();
@@ -78,7 +80,7 @@ export class GameService {
       hasGold: false,
       arrows: this.DEFAULT_ARROWS,
       isGameOver: false,
-      message: 'Game started! Hunt the Wumpus and find the gold!',
+      message: this.translationService.instant('game.start'),
       boardSize: { width, height }
     };
     
@@ -122,7 +124,7 @@ export class GameService {
       newState = { 
         ...newState, 
         hasGold: true, 
-        message: 'You picked up the gold! Return to the entrance to win!' 
+        message: this.translationService.instant('game.pickGold') 
       };
     }
     // Si el cazador tiene el oro y vuelve a la entrada
@@ -130,17 +132,17 @@ export class GameService {
       newState = { 
         ...newState, 
         isGameOver: true, 
-        message: 'Congratulations! You escaped with the gold!' 
+        message: this.translationService.instant('game.escaped') 
       };
     } else if (isAtEntranceWithoutGold) {
       // Si vuelve a la salida sin el oro, no gana
       newState = { 
         ...newState, 
-        message: 'You must collect the gold and return to the entrance!' 
+        message: this.translationService.instant('game.needGold') 
       };
     }
 
-    const resolvedState = checkCollisionsWithGold(newState);
+    const resolvedState = checkCollisionsWithGold(newState, this.translationService);
     this.gameState.next(resolvedState);
   }
 
@@ -177,15 +179,15 @@ export class GameService {
       ...state,
       arrows: state.arrows - 1,
       wumpus: updatedWumpus,
-      message: hitWumpus ? 'You hit a Wumpus!' : 'Arrow missed!'
+      message: hitWumpus ? this.translationService.instant('game.hitWumpus') : this.translationService.instant('game.arrowMissed')
     };
 
     if (newState.wumpus.length === 0) {
       newState.isGameOver = true;
-      newState.message = 'Congratulations! You won!';
+      newState.message = this.translationService.instant('game.win');
     } else if (newState.arrows === 0 && newState.wumpus.length > 0) {
       newState.isGameOver = true;
-      newState.message = 'Game Over! Out of arrows!';
+      newState.message = this.translationService.instant('game.noArrows');
     }
 
     this.gameState.next(newState);

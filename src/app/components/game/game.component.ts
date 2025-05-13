@@ -6,11 +6,12 @@ import { GameService } from '../../services/game.service';
 import { GameState } from '../../models/game.models';
 import { RangePipe } from '../../pipes/range.pipe';
 import { MobileControlsComponent } from '../mobile-controls/mobile-controls.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, RouterModule, RangePipe, MobileControlsComponent],
+  imports: [CommonModule, RouterModule, RangePipe, MobileControlsComponent, TranslateModule],
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
