@@ -1,0 +1,42 @@
+@use 'colors' as *;
+@use 'utils' as *;
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: $background-color;
+  padding: px-to-rem(12) px-to-rem(24);
+  border-bottom: px-to-rem(1) solid $surface-color-dark;
+
+  .header-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+
+    select {
+      font-size: 1rem;
+      padding: px-to-rem(4) px-to-rem(8);
+      border-radius: px-to-rem(4);
+      border: px-to-rem(1) solid $surface-color-dark;
+    }
+  }
+  
+  .header-center {
+    flex: 2;
+    text-align: center;
+    
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      color: $primary-color;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+  }
+}
+
+
+
+
+
+

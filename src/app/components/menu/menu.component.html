@@ -1,10 +1,4 @@
 <div class="menu-container">
-  <div class="language-selector">
-    <label>{{ 'menu.language' | translate }}:</label>
-    <select [(ngModel)]="selectedLanguage" (change)="onLanguageChange(selectedLanguage)" class="form-control">
-      <option *ngFor="let lang of availableLanguages" [value]="lang.code">{{ 'menu.languages.' + lang.code | translate }}</option>
-    </select>
-  </div>
 
   <h1>{{ 'menu.title' | translate }}</h1>
 

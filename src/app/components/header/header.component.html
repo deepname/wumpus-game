@@ -1,0 +1,10 @@
+<header class="app-header">
+  <div class="header-left">
+    <select #langSelect [value]="currentLang || 'en'" (change)="setLanguage(langSelect.value)">
+      <option *ngFor="let lang of languages" [value]="lang.code">{{ lang.name }}</option>
+    </select>
+  </div>
+  <div class="header-center">
+    <h1>Wumpus Game</h1>
+  </div>
+</header>
