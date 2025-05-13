@@ -1,20 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { GameService } from '../../services/game.service';
+import { TranslationService } from '../../services/translation.service';
+import { TranslateModule } from '@ngx-translate/core';
+import { ControlsConfig } from '../../models/controls.model';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule, FormsModule],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
-export class MenuComponent {
+export class MenuComponent implements OnInit {
   boardWidth = 10;
   boardHeight = 10;
-  controls = {
+  controls: ControlsConfig = {
     up: 'ArrowUp',
     down: 'ArrowDown',
     left: 'ArrowLeft',
@@ -23,20 +26,50 @@ export class MenuComponent {
   };
 
   showFog = true;
+  private _boardSizeValid = true;
+
+  availableLanguages: { code: string, name: string }[];
+  selectedLanguage: string;
 
   constructor(
+    private router: Router,
     private gameService: GameService,
-    private router: Router
-  ) {}
+    private translationService: TranslationService
+  ) {
+    this.availableLanguages = this.translationService.getAvailableLanguages();
+    this.selectedLanguage = this.translationService.getCurrentLang();
+  }
+
+  ngOnInit(): void {
+    this.validateBoardSize();
+  }
+
+  onLanguageChange(lang: string): void {
+    this.translationService.setLanguage(lang);
+  }
+
+  validateBoardSize(): void {
+    this._boardSizeValid = 
+      this.boardWidth >= 5 && 
+      this.boardWidth <= 20 && 
+      this.boardHeight >= 5 && 
+      this.boardHeight <= 20;
+  }
 
   startGame(): void {
-    this.gameService.initializeGame(this.boardWidth, this.boardHeight, this.showFog);
-    this.gameService.updateControls(this.controls);
-    this.router.navigate(['/game']);
+    if (this._boardSizeValid) {
+      this.gameService.initializeGame(
+        this.boardWidth,
+        this.boardHeight,
+        this.showFog,
+        this.controls
+      );
+      this.router.navigate(['/game']);
+    }
   }
 
   get boardSizeValid(): boolean {
-    return this.boardWidth >= this.gameService.MIN_SIZE && this.boardHeight >= this.gameService.MIN_SIZE;
+    return this._boardSizeValid;
   }
 
   updateControl(control: string, event: KeyboardEvent): void {

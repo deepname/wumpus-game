@@ -1,0 +1,49 @@
+{
+  "menu": {
+    "title": "Hunt the Wumpus",
+    "start": "Start Game",
+    "instructions": "Instructions",
+    "language": "Language",
+    "boardSize": "Board Size",
+    "width": "Width",
+    "height": "Height",
+    "controlsTitle": "Controls Configuration",
+    "controls": {
+      "up": "Move Up",
+      "down": "Move Down",
+      "left": "Move Left",
+      "right": "Move Right",
+      "shoot": "Shoot Arrow"
+    },
+    "fog": "Activate fog (fog of war)",
+    "languages": {
+      "en": "English",
+      "es": "Español",
+      "ca": "Català",
+      "gl": "Galego",
+      "eu": "Euskara"
+    }
+  },
+  "game": {
+    "score": "Score",
+    "arrows": "Arrows",
+    "shootingMode": "Shooting Mode Active",
+    "useArrows": "Use arrow keys to move",
+    "pressSpace": "Press SPACE + arrow key to shoot",
+    "gameOver": "Game Over",
+    "restart": "Restart",
+    "back": "Back to Menu",
+    "start": "Game started! Hunt the Wumpus and find the gold!",
+    "pickGold": "You picked up the gold! Return to the entrance to win!",
+    "escaped": "Congratulations! You escaped with the gold!",
+    "needGold": "You must collect the gold and return to the entrance!",
+    "hitWumpus": "You hit a Wumpus!",
+    "arrowMissed": "Arrow missed!",
+    "win": "Congratulations! You won!",
+    "noArrows": "Game Over! Out of arrows!",
+    "overWumpus": "Game Over Hunter! A Wumpus got you!",
+    "overPit": "Game Over Hunter! You fell into a pit!",
+    "warningWumpus": "You smell something terrible nearby!",
+    "warningPit": "You feel a draft!"
+  }
+}

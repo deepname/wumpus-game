@@ -1,6 +1,31 @@
 @use 'colors' as *;
 @use 'utils' as *;
 
+.language-selector {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  label {
+    color: #fff;
+  }
+
+  select {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+
+    &:hover {
+      border-color: #666;
+    }
+  }
+}
+
 .menu-container {
   max-width: px-to-rem(600);
   margin: 2rem auto;

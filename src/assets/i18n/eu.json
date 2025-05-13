@@ -1,0 +1,49 @@
+{
+  "menu": {
+    "title": "Wumpus Ehiza",
+    "start": "Hasi Jokoa",
+    "instructions": "Argibideak",
+    "language": "Hizkuntza",
+    "boardSize": "Taularen Tamaina",
+    "width": "Zabalera",
+    "height": "Altuera",
+    "controlsTitle": "Kontrolen Konfigurazioa",
+    "controls": {
+      "up": "Gora Mugitu",
+      "down": "Behera Mugitu",
+      "left": "Ezkerrera Mugitu",
+      "right": "Eskuinera Mugitu",
+      "shoot": "Gezia Jaurti"
+    },
+    "fog": "Lainoa aktibatu (gerra-lainoa)",
+    "languages": {
+      "en": "English",
+      "es": "Español",
+      "ca": "Català",
+      "gl": "Galego",
+      "eu": "Euskara"
+    }
+  },
+  "game": {
+    "score": "Puntuazioa",
+    "arrows": "Geziak",
+    "shootingMode": "Tiro modua aktibatuta",
+    "useArrows": "Erabili geziak mugitzeko",
+    "pressSpace": "Sakatu ESPAZIOA + gezia jaurtitzeko",
+    "gameOver": "Jokoa Amaitu Da",
+    "restart": "Berriz Hasi",
+    "back": "Menura Itzuli",
+    "start": "Jokoa hasi da! Ehizatu Wumpusa eta aurkitu urrea!",
+    "pickGold": "Urrea jaso duzu! Itzuli sarrerara irabazteko!",
+    "escaped": "Zorionak! Urrearekin ihes egin duzu!",
+    "needGold": "Urrea jaso eta sarrerara itzuli behar duzu!",
+    "hitWumpus": "Wumpus bati jo diozu!",
+    "arrowMissed": "Geziak huts egin du!",
+    "win": "Zorionak! Irabazi duzu!",
+    "noArrows": "Jokoa amaitu da! Gezirik gabe!",
+    "overWumpus": "Jokoa amaitu da! Wumpus batek harrapatu zaitu!",
+    "overPit": "Jokoa amaitu da! Zulo batean erori zara!",
+    "warningWumpus": "Zerbait izugarri usaintzen duzu inguruan!",
+    "warningPit": "Aire korronte bat sumatzen duzu!"
+  }
+}
